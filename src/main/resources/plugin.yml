@@ -1,0 +1,5 @@
+name: LiteItemVoid
+version: '${version}'
+main: dev.rollczi.liteitemvoid.ItemVoidPlugin
+api-version: 1.13
+authors: [ Rollczi ]

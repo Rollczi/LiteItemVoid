@@ -7,7 +7,6 @@ package dev.rollczi.liteitemvoid.config;
 import dev.rollczi.liteitemvoid.config.composers.ComponentComposer;
 import dev.rollczi.liteitemvoid.config.composers.DateFormatComposer;
 import dev.rollczi.liteitemvoid.config.composers.MaterialComposer;
-import dev.rollczi.liteitemvoid.config.plugin.LicenceConfig;
 import dev.rollczi.liteitemvoid.config.plugin.PluginConfig;
 import org.bukkit.Material;
 import net.dzikoysk.cdn.Cdn;
@@ -31,17 +30,14 @@ public class ConfigurationManager {
             .build();
 
     private final PluginConfig pluginConfig;
-    private final LicenceConfig licenceConfig;
 
     public ConfigurationManager(File dataFolder) {
         this.pluginConfig = new PluginConfig(dataFolder, "config.yml");
-        this.licenceConfig = new LicenceConfig(dataFolder, "licence.yml");
     }
 
     public Result<Blank, CdnException> loadConfigs() {
         return Result.<CdnException>ok()
                 .flatMap(blank -> this.load(this.pluginConfig))
-                .flatMap(blank -> this.load(this.licenceConfig))
                 .mapToBlank();
     }
 
@@ -59,7 +55,4 @@ public class ConfigurationManager {
         return pluginConfig;
     }
 
-    public LicenceConfig getLicenceConfig() {
-        return licenceConfig;
-    }
 }

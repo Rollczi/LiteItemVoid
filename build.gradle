@@ -59,6 +59,7 @@ shadowJar {
     relocate "net.dzikoysk", "dev.rollczi.liteitemvoid.libs.net.dzikoysk"
     relocate "dev.rollczi.litecommands", "dev.rollczi.liteitemvoid.libs.dev.rollczi.litecommands"
     relocate "dev.triumphteam", "dev.rollczi.liteitemvoid.libs.dev.triumphteam"
+    relocate "com.google.gson", "dev.rollczi.liteitemvoid.libs.com.google.gson"
     relocate "net.kyori", "dev.rollczi.liteitemvoid.libs.net.kyori"
     relocate "panda", "dev.rollczi.liteitemvoid.libs.panda"
     relocate "org.panda_lang", "dev.rollczi.liteitemvoid.libs.panda"

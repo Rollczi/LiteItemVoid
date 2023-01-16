@@ -3,6 +3,7 @@ package dev.rollczi.liteitemvoid.deepvoid;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.InventoryHolder;
+import org.bukkit.inventory.PlayerInventory;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.HashMap;
@@ -43,6 +44,10 @@ public class DeepVoidViewHolder implements InventoryHolder {
 
         if (consumer == null) {
             onNoneClick.accept(event, this);
+            return;
+        }
+
+        if (event.getClickedInventory() instanceof PlayerInventory) {
             return;
         }
 

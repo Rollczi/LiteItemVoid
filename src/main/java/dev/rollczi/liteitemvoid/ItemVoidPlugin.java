@@ -38,7 +38,6 @@ public final class ItemVoidPlugin extends JavaPlugin {
     private DeepVoidController deepVoidController;
     private ViewRegistry viewRegistry;
     private LiteCommands liteCommands;
-    private boolean licenceActive = false;
 
     @Override
     public void onEnable() {
@@ -50,8 +49,6 @@ public final class ItemVoidPlugin extends JavaPlugin {
 
         this.configurationManager = new ConfigurationManager(this.getDataFolder());
         this.configurationManager.loadConfigs();
-
-        this.licenceActive = true;
 
         this.deepVoid = new DeepVoid();
         this.viewRegistry = new ViewRegistry(this.getServer(), configurationManager.getPluginConfig());
@@ -79,10 +76,6 @@ public final class ItemVoidPlugin extends JavaPlugin {
 
     @Override
     public void onDisable() {
-        if (!this.licenceActive) {
-            return;
-        }
-
         this.liteCommands.getPlatformManager().unregisterCommands();
     }
 

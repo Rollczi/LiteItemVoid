@@ -4,9 +4,9 @@
 
 package dev.rollczi.liteitemvoid.config;
 
-import dev.rollczi.liteitemvoid.config.composers.ComponentComposer;
-import dev.rollczi.liteitemvoid.config.composers.DateFormatComposer;
-import dev.rollczi.liteitemvoid.config.composers.MaterialComposer;
+import dev.rollczi.liteitemvoid.config.composer.ComponentComposer;
+import dev.rollczi.liteitemvoid.config.composer.DateFormatComposer;
+import dev.rollczi.liteitemvoid.config.composer.MaterialComposer;
 import dev.rollczi.liteitemvoid.config.plugin.PluginConfig;
 import org.bukkit.Material;
 import net.dzikoysk.cdn.Cdn;

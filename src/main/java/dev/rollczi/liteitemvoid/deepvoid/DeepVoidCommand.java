@@ -132,7 +132,7 @@ public class DeepVoidCommand {
     public void info(Audience audience) {
         audience.sendMessage(Component.empty());
         audience.sendMessage(miniMessage.deserialize(" <dark_gray>[<#4f1794>#</#4f1794>]</dark_gray> <gradient:#4f1794:#db2364><bold>LiteItemVoid</bold> <gray>by Rollczi"));
-        audience.sendMessage(miniMessage.deserialize(" <gradient:#4f1794:#db2364>See discord <gray><click:open_url:'https://discord.com/invite/DFpmMJQsa4'>[link] (DFpmMJQsa4)</click>"));
+        audience.sendMessage(miniMessage.deserialize(" <gradient:#4f1794:#db2364>See discord <gray><click:open_url:'https://discord.com/invite/6cUhkj6uZJ'>[link] (6cUhkj6uZJ)</click>"));
         audience.sendMessage(Component.empty());
     }
 

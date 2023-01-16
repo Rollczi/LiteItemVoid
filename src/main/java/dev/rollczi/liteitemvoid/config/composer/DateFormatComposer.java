@@ -1,4 +1,4 @@
-package dev.rollczi.liteitemvoid.config.composers;
+package dev.rollczi.liteitemvoid.config.composer;
 
 import net.dzikoysk.cdn.serdes.Composer;
 import net.dzikoysk.cdn.serdes.SimpleDeserializer;

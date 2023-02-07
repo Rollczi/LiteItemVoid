@@ -1,5 +1,6 @@
 package dev.rollczi.liteitemvoid.deepvoid;
 
+import dev.rollczi.liteitemvoid.util.MaterialUtil;
 import org.bukkit.Server;
 import org.bukkit.entity.HumanEntity;
 import org.bukkit.entity.Player;
@@ -78,7 +79,7 @@ public class DeepVoidViewPage {
         for (int slot = 0; slot < contents.length; slot++) {
             ItemStack content = contents[slot];
 
-            if (content != null && !content.getType().isAir()) {
+            if (content != null && !MaterialUtil.isAir(content.getType())) {
                 continue;
             }
 

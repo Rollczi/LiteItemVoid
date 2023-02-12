@@ -76,7 +76,13 @@ public final class ItemVoidPlugin extends JavaPlugin {
 
     @Override
     public void onDisable() {
-        this.liteCommands.getPlatformManager().unregisterCommands();
+        if (this.liteCommands != null) {
+            this.liteCommands.getPlatformManager().unregisterCommands();
+        }
+
+        if (this.audience != null) {
+            this.audience.close();
+        }
     }
 
 }

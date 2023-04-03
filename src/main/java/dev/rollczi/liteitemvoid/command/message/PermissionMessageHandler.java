@@ -4,36 +4,32 @@
 
 package dev.rollczi.liteitemvoid.command.message;
 
-import dev.rollczi.liteitemvoid.command.paper.LegacyColorProcessor;
+import dev.rollczi.litecommands.command.LiteInvocation;
+import dev.rollczi.litecommands.command.permission.RequiredPermissions;
+import dev.rollczi.litecommands.handle.PermissionHandler;
+import dev.rollczi.liteitemvoid.NotificationService;
 import dev.rollczi.liteitemvoid.config.plugin.PluginConfig;
-import dev.rollczi.litecommands.LiteInvocation;
-import dev.rollczi.litecommands.valid.messages.PermissionMessage;
 import net.kyori.adventure.text.Component;
-import net.kyori.adventure.text.minimessage.MiniMessage;
+import org.bukkit.command.CommandSender;
 import panda.utilities.text.Joiner;
 
-import java.util.List;
+public class PermissionMessageHandler implements PermissionHandler<CommandSender> {
 
-public class PermissionMessageHandler implements PermissionMessage {
-
-    private final MiniMessage miniMessage = MiniMessage.builder()
-            .postProcessor(new LegacyColorProcessor())
-            .build();
-
+    private final NotificationService notificationService;
     private final PluginConfig pluginConfig;
 
-    public PermissionMessageHandler(PluginConfig pluginConfig) {
+    public PermissionMessageHandler(NotificationService notificationService, PluginConfig pluginConfig) {
+        this.notificationService = notificationService;
         this.pluginConfig = pluginConfig;
     }
 
     @Override
-    public String message(LiteInvocation invocation, List<String> permissions) {
+    public void handle(CommandSender commandSender, LiteInvocation invocation, RequiredPermissions requiredPermissions) {
         Component component = pluginConfig.invalidPermission
                 .replaceText(builder -> builder
                         .match("\\$\\{permissions}")
-                        .replacement(Joiner.on(", ").join(permissions).toString()));
+                        .replacement(Joiner.on(", ").join(requiredPermissions.getPermissions()).toString()));
 
-        return miniMessage.serialize(component);
+        this.notificationService.sendMessage(commandSender, component);
     }
-
 }

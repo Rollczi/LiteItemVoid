@@ -7,6 +7,7 @@ package dev.rollczi.liteitemvoid;
 import dev.rollczi.litecommands.LiteCommands;
 import dev.rollczi.litecommands.bukkit.LiteBukkitFactory;
 import dev.rollczi.litecommands.bukkit.tools.BukkitOnlyPlayerContextual;
+import dev.rollczi.liteitemvoid.command.configurer.CommandConfigurer;
 import dev.rollczi.liteitemvoid.command.contextual.AudienceContextual;
 import dev.rollczi.liteitemvoid.command.message.InvalidUseMessageHandler;
 import dev.rollczi.liteitemvoid.command.message.PermissionMessageHandler;
@@ -67,6 +68,9 @@ public final class ItemVoidPlugin extends JavaPlugin {
                 .typeBind(AudienceProvider.class,       () -> this.audienceProvider)
                 .typeBind(PluginDescriptionFile.class,  this::getDescription)
                 .command(DeepVoidCommand.class)
+
+                .commandGlobalEditor(new CommandConfigurer(configurationManager.getCommandConfig()))
+
                 .register();
 
         this.getServer().getPluginManager().registerEvents(new DeepVoidViewController(this.viewRegistry.deepVoid), this);

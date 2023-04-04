@@ -68,6 +68,7 @@ public class DeepVoidCommand {
     }
 
     @Execute(route = "on")
+    @Permission("itemvoid.admin")
     public void enable(Audience audience) {
         if (deepVoid.isEnabled()) {
             audience.sendMessage(config.voidAlreadyEnabled);

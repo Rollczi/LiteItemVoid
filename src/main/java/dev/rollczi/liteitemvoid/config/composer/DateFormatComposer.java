@@ -11,8 +11,8 @@ public class DateFormatComposer implements Composer<SimpleDateFormat>, SimpleDes
 
     @Override
     public Result<SimpleDateFormat, Exception> deserialize(String source) {
-        return Result.<SimpleDateFormat, Exception>attempt(IllegalArgumentException.class, () -> new SimpleDateFormat(source))
-                .orElse(e -> Result.ok(new SimpleDateFormat("mm:ss:SS")))
+        return Result.<SimpleDateFormat, Exception>supplyThrowing(IllegalArgumentException.class, () -> new SimpleDateFormat(source))
+                .orElse(error -> Result.ok(new SimpleDateFormat("mm:ss:SS")))
                 .onError(Throwable::printStackTrace);
     }
 

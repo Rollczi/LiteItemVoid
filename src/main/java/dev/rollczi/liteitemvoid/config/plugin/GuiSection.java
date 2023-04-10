@@ -4,13 +4,13 @@
 
 package dev.rollczi.liteitemvoid.config.plugin;
 
+import dev.rollczi.liteitemvoid.util.LegacyColorProcessor;
 import net.dzikoysk.cdn.entity.Contextual;
 import net.dzikoysk.cdn.entity.Description;
 import net.dzikoysk.cdn.entity.Exclude;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.minimessage.MiniMessage;
 import org.bukkit.Material;
-import dev.rollczi.liteitemvoid.command.paper.LegacyColorProcessor;
 
 import java.util.function.Supplier;
 
@@ -20,7 +20,7 @@ import static dev.rollczi.liteitemvoid.config.plugin.ItemConfig.skull;
 public class GuiSection {
 
     @Exclude
-    private final MiniMessage miniMessage = MiniMessage.builder()
+    private static final MiniMessage MINI_MESSAGE = MiniMessage.builder()
             .postProcessor(new LegacyColorProcessor())
             .build();
 
@@ -63,7 +63,7 @@ public class GuiSection {
     );
 
     private Component of(String text) {
-        return miniMessage.deserialize(text);
+        return MINI_MESSAGE.deserialize(text);
     }
 
     private <T> T tryOr(Supplier<T> supplier, Supplier<T> defaultValue) {

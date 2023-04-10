@@ -10,10 +10,10 @@ import org.bukkit.Server;
 
 public class ViewRegistry {
 
-    public final DeepVoidView VOID;
+    public final DeepVoidView deepVoid;
 
     public ViewRegistry(Server server, PluginConfig pluginConfig) {
-        VOID = new DeepVoidView(pluginConfig, server);
+        this.deepVoid = new DeepVoidView(pluginConfig, server);
     }
 
 }

@@ -6,6 +6,7 @@ package dev.rollczi.liteitemvoid.deepvoid;
 
 import dev.rollczi.liteitemvoid.config.plugin.PluginConfig;
 import dev.rollczi.liteitemvoid.shared.ItemStackList;
+import net.kyori.adventure.platform.AudienceProvider;
 import org.bukkit.entity.Entity;
 import dev.rollczi.liteitemvoid.scheduler.Scheduler;
 import net.kyori.adventure.platform.bukkit.BukkitAudiences;
@@ -23,15 +24,15 @@ import java.util.function.Consumer;
 
 public class DeepVoidController {
 
-    private final BukkitAudiences bukkitAudiences;
+    private final AudienceProvider audienceProvider;
     private final Server server;
     private final PluginConfig config;
     private final Scheduler scheduler;
     private final DeepVoid deepVoid;
     private final DeepVoidView view;
 
-    public DeepVoidController(BukkitAudiences bukkitAudiences, Server server, PluginConfig config, Scheduler scheduler, DeepVoid deepVoid, DeepVoidView view) {
-        this.bukkitAudiences = bukkitAudiences;
+    public DeepVoidController(AudienceProvider audienceProvider, Server server, PluginConfig config, Scheduler scheduler, DeepVoid deepVoid, DeepVoidView view) {
+        this.audienceProvider = audienceProvider;
         this.server = server;
         this.config = config;
         this.scheduler = scheduler;
@@ -53,7 +54,7 @@ public class DeepVoidController {
         Component component = config.messagesInTime.get(this.deepVoid.getTimeToOpen());
 
         if (component != null) {
-            bukkitAudiences.players().sendMessage(component);
+            audienceProvider.players().sendMessage(component);
         }
 
         if (this.deepVoid.getTimeToOpen() <= 0) {
@@ -95,7 +96,7 @@ public class DeepVoidController {
             this.deepVoid.close();
 
             for (Player player : this.view.closeAll()) {
-                this.bukkitAudiences.player(player).sendMessage(this.config.voidClosedForce);
+                this.audienceProvider.player(player.getUniqueId()).sendMessage(this.config.voidClosedForce);
             }
 
         }, this.config.timeCloseVoid);

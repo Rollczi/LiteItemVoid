@@ -4,36 +4,38 @@
 
 package dev.rollczi.liteitemvoid.deepvoid;
 
+import dev.rollczi.litecommands.command.execute.Execute;
+import dev.rollczi.litecommands.command.permission.Permission;
+import dev.rollczi.litecommands.command.route.Route;
 import dev.rollczi.liteitemvoid.config.ConfigurationManager;
 import dev.rollczi.liteitemvoid.config.plugin.PluginConfig;
+import dev.rollczi.liteitemvoid.util.LegacyColorProcessor;
 import dev.rollczi.liteitemvoid.view.ViewRegistry;
-import dev.rollczi.litecommands.annotations.Execute;
-import dev.rollczi.litecommands.annotations.Permission;
-import dev.rollczi.litecommands.annotations.Section;
-import net.kyori.adventure.text.minimessage.MiniMessage;
-import org.bukkit.plugin.PluginDescriptionFile;
 import net.dzikoysk.cdn.CdnException;
 import net.kyori.adventure.audience.Audience;
 import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.minimessage.MiniMessage;
 import org.bukkit.entity.Player;
+import org.bukkit.plugin.PluginDescriptionFile;
 import panda.std.Blank;
 import panda.std.Result;
 
 import java.util.Date;
 import java.util.regex.Pattern;
 
-@Section(route = "deepvoid", aliases = { "void", "otchlan" })
+@Route(name = "deepvoid", aliases = { "void", "otchlan" })
 public class DeepVoidCommand {
 
     private static final Pattern TIME_PATTERN = Pattern.compile("\\$\\{time}");
+    private static final MiniMessage MINI_MESSAGE = MiniMessage.builder()
+            .postProcessor(new LegacyColorProcessor())
+            .build();
 
-    private final MiniMessage miniMessage;
     private final PluginConfig config;
     private final DeepVoid deepVoid;
     private final ViewRegistry viewRegistry;
 
-    public DeepVoidCommand(MiniMessage miniMessage, PluginConfig config, DeepVoid deepVoid, ViewRegistry viewRegistry) {
-        this.miniMessage = miniMessage;
+    public DeepVoidCommand(PluginConfig config, DeepVoid deepVoid, ViewRegistry viewRegistry) {
         this.config = config;
         this.deepVoid = deepVoid;
         this.viewRegistry = viewRegistry;
@@ -54,7 +56,7 @@ public class DeepVoidCommand {
             return;
         }
 
-        viewRegistry.VOID.show(player);
+        viewRegistry.deepVoid.show(player);
     }
 
     @Execute(route = "help")
@@ -66,6 +68,7 @@ public class DeepVoidCommand {
     }
 
     @Execute(route = "on")
+    @Permission("itemvoid.admin")
     public void enable(Audience audience) {
         if (deepVoid.isEnabled()) {
             audience.sendMessage(config.voidAlreadyEnabled);
@@ -124,15 +127,15 @@ public class DeepVoidCommand {
     @Permission("itemvoid.admin")
     @Execute(route = "version")
     public void version(Audience audience, PluginDescriptionFile description) {
-        audience.sendMessage(miniMessage.deserialize("<gradient:#4f1794:#db2364><bold>LiteItemVoid <gray>" + description.getVersion()));
+        audience.sendMessage(MINI_MESSAGE.deserialize("<gradient:#4f1794:#db2364><bold>LiteItemVoid <gray>" + description.getVersion()));
     }
 
     @Permission("itemvoid.admin")
     @Execute(route = "info")
     public void info(Audience audience) {
         audience.sendMessage(Component.empty());
-        audience.sendMessage(miniMessage.deserialize(" <dark_gray>[<#4f1794>#</#4f1794>]</dark_gray> <gradient:#4f1794:#db2364><bold>LiteItemVoid</bold> <gray>by Rollczi"));
-        audience.sendMessage(miniMessage.deserialize(" <gradient:#4f1794:#db2364>See discord <gray><click:open_url:'https://discord.com/invite/6cUhkj6uZJ'>[link] (6cUhkj6uZJ)</click>"));
+        audience.sendMessage(MINI_MESSAGE.deserialize(" <dark_gray>[<#4f1794>#</#4f1794>]</dark_gray> <gradient:#4f1794:#db2364><bold>LiteItemVoid</bold> <gray>by Rollczi"));
+        audience.sendMessage(MINI_MESSAGE.deserialize(" <gradient:#4f1794:#db2364>See discord <gray><click:open_url:'https://discord.com/invite/6cUhkj6uZJ'>[link] (6cUhkj6uZJ)</click>"));
         audience.sendMessage(Component.empty());
     }
 

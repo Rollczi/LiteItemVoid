@@ -4,33 +4,31 @@
 
 package dev.rollczi.liteitemvoid.command.message;
 
-import dev.rollczi.liteitemvoid.command.paper.LegacyColorProcessor;
+import dev.rollczi.litecommands.command.LiteInvocation;
+import dev.rollczi.litecommands.handle.InvalidUsageHandler;
+import dev.rollczi.litecommands.schematic.Schematic;
+import dev.rollczi.liteitemvoid.NotificationService;
 import dev.rollczi.liteitemvoid.config.plugin.PluginConfig;
-import dev.rollczi.litecommands.LiteInvocation;
-import dev.rollczi.litecommands.valid.messages.InvalidUseMessage;
 import net.kyori.adventure.text.Component;
-import net.kyori.adventure.text.minimessage.MiniMessage;
+import org.bukkit.command.CommandSender;
 
-public class InvalidUseMessageHandler implements InvalidUseMessage {
-
-    private final MiniMessage miniMessage = MiniMessage.builder()
-            .postProcessor(new LegacyColorProcessor())
-            .build();
+public class InvalidUseMessageHandler implements InvalidUsageHandler<CommandSender> {
 
     private final PluginConfig pluginConfig;
+    private final NotificationService notificationService;
 
-    public InvalidUseMessageHandler(PluginConfig pluginConfig) {
+    public InvalidUseMessageHandler(PluginConfig pluginConfig, NotificationService notificationService) {
         this.pluginConfig = pluginConfig;
+        this.notificationService = notificationService;
     }
 
     @Override
-    public String message(LiteInvocation invocation, String useScheme) {
+    public void handle(CommandSender commandSender, LiteInvocation invocation, Schematic schematic) {
         Component component = pluginConfig.invalidUsage
                 .replaceText(builder -> builder
                         .match("\\$\\{usage}")
-                        .replacement(useScheme));
+                        .replacement(schematic.first()));
 
-        return miniMessage.serialize(component);
+        this.notificationService.sendMessage(commandSender, component);
     }
-
 }

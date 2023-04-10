@@ -5,9 +5,9 @@
 package dev.rollczi.liteitemvoid.config.plugin;
 
 import com.google.common.collect.ImmutableMap;
+import dev.rollczi.liteitemvoid.util.LegacyColorProcessor;
 import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer;
 import org.bukkit.inventory.ItemStack;
-import dev.rollczi.liteitemvoid.command.paper.LegacyColorProcessor;
 import dev.rollczi.liteitemvoid.config.AbstractConfigWithResource;
 import net.dzikoysk.cdn.entity.Description;
 import net.dzikoysk.cdn.entity.Exclude;

@@ -29,7 +29,7 @@ dependencies {
     implementation("net.kyori:adventure-text-minimessage:4.13.0")
 
     // LiteCommands
-    implementation("dev.rollczi.litecommands:bukkit-adventure:2.8.6")
+    implementation("dev.rollczi.litecommands:bukkit-adventure:2.8.8")
 
     // TriumphGUI
     implementation("dev.triumphteam:triumph-gui:3.1.4")

@@ -5,10 +5,9 @@
 package dev.rollczi.liteitemvoid;
 
 import dev.rollczi.litecommands.LiteCommands;
-import dev.rollczi.litecommands.bukkit.LiteBukkitFactory;
+import dev.rollczi.litecommands.bukkit.adventure.platform.LiteBukkitAdventurePlatformFactory;
 import dev.rollczi.litecommands.bukkit.tools.BukkitOnlyPlayerContextual;
 import dev.rollczi.liteitemvoid.command.configurer.CommandConfigurer;
-import dev.rollczi.liteitemvoid.command.contextual.AudienceContextual;
 import dev.rollczi.liteitemvoid.command.message.InvalidUseMessageHandler;
 import dev.rollczi.liteitemvoid.command.message.PermissionMessageHandler;
 import dev.rollczi.liteitemvoid.config.ConfigurationManager;
@@ -19,10 +18,11 @@ import dev.rollczi.liteitemvoid.deepvoid.DeepVoidController;
 import dev.rollczi.liteitemvoid.deepvoid.DeepVoidViewController;
 import dev.rollczi.liteitemvoid.scheduler.Scheduler;
 import dev.rollczi.liteitemvoid.scheduler.SchedulerBukkit;
+import dev.rollczi.liteitemvoid.util.LegacyColorProcessor;
 import dev.rollczi.liteitemvoid.view.ViewRegistry;
-import net.kyori.adventure.audience.Audience;
 import net.kyori.adventure.platform.AudienceProvider;
 import net.kyori.adventure.platform.bukkit.BukkitAudiences;
+import net.kyori.adventure.text.minimessage.MiniMessage;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.PluginDescriptionFile;
@@ -43,6 +43,9 @@ public final class ItemVoidPlugin extends JavaPlugin {
     public void onEnable() {
         Scheduler scheduler = new SchedulerBukkit(this);
         this.audienceProvider = BukkitAudiences.create(this);
+        MiniMessage miniMessage = MiniMessage.builder()
+                .postProcessor(new LegacyColorProcessor())
+                .build();
 
         this.configurationManager = new ConfigurationManager(this.getDataFolder());
         this.configurationManager.loadConfigs();
@@ -54,12 +57,11 @@ public final class ItemVoidPlugin extends JavaPlugin {
 
         DeepVoidController deepVoidController = new DeepVoidController(audienceProvider, this.getServer(), configurationManager.getPluginConfig(), scheduler, deepVoid, viewRegistry.deepVoid);
 
-        this.liteCommands = LiteBukkitFactory.builder(this.getServer(), "deep-void")
+        this.liteCommands = LiteBukkitAdventurePlatformFactory.builder(this.getServer(), "lite-item-void", false, audienceProvider, miniMessage)
                 .invalidUsageHandler(new InvalidUseMessageHandler(configurationManager.getPluginConfig(), notificationService))
                 .permissionHandler(new PermissionMessageHandler(notificationService, configurationManager.getPluginConfig()))
 
                 .contextualBind(Player.class,   new BukkitOnlyPlayerContextual<>("Only players can use this command!"))
-                .contextualBind(Audience.class, new AudienceContextual(audienceProvider))
 
                 .typeBind(ConfigurationManager.class,   () -> this.configurationManager)
                 .typeBind(PluginConfig.class,           () -> this.configurationManager.getPluginConfig())

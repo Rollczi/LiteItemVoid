@@ -4,6 +4,9 @@ An extensive plugin for cleaning worlds from unnecessary items. With the ability
 ![image](https://github.com/Rollczi/LiteItemVoid/assets/49173834/cb27c431-0613-43d3-bb3b-950cbd0d0d07)
 ![image](https://github.com/Rollczi/LiteItemVoid/assets/49173834/5d4be68e-61f7-4e97-8032-c3f94b3d9b92)
 
+You can buy this plugin on [buildbybit](https://builtbybit.com/resources/liteitemvoid.23200/?ref=discover) to support my work. 💜 
+
+Also, feel free to build LiteItemVoid on your own.
 
 ### Features
 - Cleaning the world from unnecessary items lying on the ground.

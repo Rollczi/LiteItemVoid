@@ -46,8 +46,9 @@ public class DeepVoidController {
     }
 
     private void nextTick() {
+        this.scheduler.runTaskLater(this::nextTick, 1L);
+
         if (this.deepVoid.isDisabled()) {
-            this.scheduler.runTaskLater(this::nextTick, 1L);
             return;
         }
 
@@ -60,12 +61,10 @@ public class DeepVoidController {
         if (this.deepVoid.getTimeToOpen() <= 0) {
             this.clearWorldsAndOpenDeepVoid();
             this.deepVoid.updateTimeToOpen(time -> config.timeClear + config.timeClearDelay);
-            this.scheduler.runTaskLater(this::nextTick, 1L);
             return;
         }
 
         this.deepVoid.updateTimeToOpen(time -> time - 1);
-        this.scheduler.runTaskLater(this::nextTick, 1L);
     }
 
     private void clearWorldsAndOpenDeepVoid() {

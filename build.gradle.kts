@@ -4,6 +4,7 @@ plugins {
     id("java")
     id("com.github.johnrengelman.shadow") version "7.1.2"
     id("net.minecrell.plugin-yml.bukkit") version "0.5.2"
+    id("xyz.jpenilla.run-paper") version "2.2.0"
 }
 
 group = "dev.rollczi"
@@ -45,7 +46,7 @@ tasks.withType<JavaCompile> {
 }
 
 java {
-    toolchain.languageVersion.set(JavaLanguageVersion.of(8))
+    toolchain.languageVersion.set(JavaLanguageVersion.of(17))
 }
 
 bukkit {
@@ -83,4 +84,8 @@ tasks.withType<ShadowJar> {
     ).forEach { pack ->
         relocate(pack, "$prefix.$pack")
     }
+}
+
+tasks.runServer {
+    minecraftVersion("1.20.4")
 }

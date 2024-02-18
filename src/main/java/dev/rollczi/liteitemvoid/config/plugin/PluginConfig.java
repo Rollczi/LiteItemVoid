@@ -59,13 +59,13 @@ public class PluginConfig extends AbstractConfigWithResource implements DeepVoid
             "#PL: Odstęp w tikach między kolejnymi oczyszczeniami świata",
             "#EN: Delay in ticks between world cleanings"
     })
-    public long timeClearDelay = 1200L;
+    public long timeClearDelay = 2400L;
 
     @Description({
             "#PL: Czas w tickach, po którym itemVoid zostanie zamknięty",
             "#EN: Time in ticks, after which itemVoid will be closed"
     })
-    public long timeCloseVoid = 2400L;
+    public long timeCloseVoid = 2000L;
 
     @Description({
             "#PL: Czy usuwać wrogie potwory ze świata",

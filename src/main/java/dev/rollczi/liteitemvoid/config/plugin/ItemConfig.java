@@ -36,8 +36,8 @@ public class ItemConfig {
     public Material type = Material.STONE;
     public String skull = StringUtils.EMPTY;
     public int durability = 0;
-    public Component name = MINI_MESSAGE.deserialize("<green>text</green>");
-    public List<Component> lore = Collections.singletonList(MINI_MESSAGE.deserialize("<green>lore</green>"));
+    public Component name = MINI_MESSAGE.deserialize("<green>name</green>");
+    public List<Component> lore = Collections.emptyList();
 
     public ItemConfig() {}
 

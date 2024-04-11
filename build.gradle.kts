@@ -11,11 +11,10 @@ version = "2.0.5-SNAPSHOT"
 repositories {
     mavenCentral()
 
-    maven { url = uri("https://repo.panda-lang.org/releases") }
-    maven { url = uri("https://repo.papermc.io/repository/maven-public/") }
-    maven { url = uri("https://oss.sonatype.org/content/repositories/snapshots/") }
-
-    maven { url = uri("https://hub.spigotmc.org/nexus/content/repositories/snapshots/") }
+    maven("https://repo.panda-lang.org/releases")
+    maven("https://repo.papermc.io/repository/maven-public/")
+    maven("https://oss.sonatype.org/content/repositories/snapshots/")
+    maven("https://hub.spigotmc.org/nexus/content/repositories/snapshots/")
 }
 
 dependencies {

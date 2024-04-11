@@ -1,39 +1,35 @@
-import com.github.jengelman.gradle.plugins.shadow.tasks.ShadowJar
-
 plugins {
-    id("java")
-    id("com.github.johnrengelman.shadow") version "7.1.2"
-    id("net.minecrell.plugin-yml.bukkit") version "0.5.2"
-    id("xyz.jpenilla.run-paper") version "2.2.0"
+    `java-library`
+    id("com.github.johnrengelman.shadow") version "8.1.1"
+    id("net.minecrell.plugin-yml.bukkit") version "0.6.0"
+    id("xyz.jpenilla.run-paper") version "2.2.2"
 }
 
 group = "dev.rollczi"
-version = "2.0.4"
+version = "2.0.5-SNAPSHOT"
 
 repositories {
     mavenCentral()
 
-    maven { url = uri("https://repo.panda-lang.org/releases") }
-    maven { url = uri("https://papermc.io/repo/repository/maven-public/") }
-    maven { url = uri("https://oss.sonatype.org/content/repositories/snapshots/") }
-
-    maven { url = uri("https://hub.spigotmc.org/nexus/content/repositories/snapshots/") }
-    maven { url = uri("https://repo.mattstudios.me/artifactory/public/") }
+    maven("https://repo.panda-lang.org/releases")
+    maven("https://repo.papermc.io/repository/maven-public/")
+    maven("https://oss.sonatype.org/content/repositories/snapshots/")
+    maven("https://hub.spigotmc.org/nexus/content/repositories/snapshots/")
 }
 
 dependencies {
     // Spigot API
-    compileOnly("org.spigotmc:spigot-api:1.19-R0.1-SNAPSHOT")
+    compileOnly("org.spigotmc:spigot-api:1.20.4-R0.1-SNAPSHOT")
 
     // kyori adventure
-    implementation("net.kyori:adventure-platform-bukkit:4.3.0")
-    implementation("net.kyori:adventure-text-minimessage:4.13.0")
+    implementation("net.kyori:adventure-platform-bukkit:4.3.2")
+    implementation("net.kyori:adventure-text-minimessage:4.16.0")
 
     // LiteCommands
-    implementation("dev.rollczi.litecommands:bukkit-adventure:2.8.8")
+    implementation("dev.rollczi.litecommands:bukkit-adventure:2.8.9")
 
     // TriumphGUI
-    implementation("dev.triumphteam:triumph-gui:3.1.4")
+    implementation("dev.triumphteam:triumph-gui:3.1.7")
 
     // CDN
     implementation("net.dzikoysk:cdn:1.14.4") {
@@ -41,7 +37,7 @@ dependencies {
     }
 }
 
-tasks.withType<JavaCompile> {
+tasks.compileJava {
     options.encoding = "UTF-8"
 }
 
@@ -58,7 +54,7 @@ bukkit {
     version = "${project.version}"
 }
 
-tasks.withType<ShadowJar> {
+tasks.shadowJar {
     archiveFileName.set("LiteItemVoid-${project.version}-build.jar")
 
     exclude(
@@ -70,7 +66,6 @@ tasks.withType<ShadowJar> {
     )
 
     mergeServiceFiles()
-    minimize()
 
     val prefix = "dev.rollczi.liteitemvoid.libs"
 

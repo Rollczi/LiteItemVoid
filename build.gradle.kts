@@ -1,6 +1,6 @@
 plugins {
     `java-library`
-    id("com.gradleup.shadow") version "8.3.0"
+    id("com.gradleup.shadow") version "8.3.3"
     id("net.minecrell.plugin-yml.bukkit") version "0.6.0"
     id("xyz.jpenilla.run-paper") version "2.3.1"
 }
@@ -32,7 +32,7 @@ dependencies {
     implementation("dev.triumphteam:triumph-gui:3.1.10")
 
     // CDN
-    implementation("net.dzikoysk:cdn:1.14.4") {
+    implementation("net.dzikoysk:cdn:1.14.5") {
         exclude("kotlin")
     }
 }

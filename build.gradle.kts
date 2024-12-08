@@ -29,7 +29,7 @@ dependencies {
     implementation("dev.rollczi.litecommands:bukkit-adventure:2.8.9")
 
     // TriumphGUI
-    implementation("dev.triumphteam:triumph-gui:3.1.10")
+    implementation("dev.triumphteam:triumph-gui:3.1.11")
 
     // CDN
     implementation("net.dzikoysk:cdn:1.14.5") {

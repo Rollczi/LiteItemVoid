@@ -32,7 +32,7 @@ dependencies {
     implementation("dev.triumphteam:triumph-gui:3.1.11")
 
     // CDN
-    implementation("net.dzikoysk:cdn:1.14.6") {
+    implementation("net.dzikoysk:cdn:1.14.8") {
         exclude("kotlin")
     }
 }

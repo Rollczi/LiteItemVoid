@@ -22,7 +22,7 @@ dependencies {
     compileOnly("org.spigotmc:spigot-api:1.20.4-R0.1-SNAPSHOT")
 
     // kyori adventure
-    implementation("net.kyori:adventure-platform-bukkit:4.3.4")
+    implementation("net.kyori:adventure-platform-bukkit:4.4.0")
     implementation("net.kyori:adventure-text-minimessage:4.21.0")
 
     // LiteCommands

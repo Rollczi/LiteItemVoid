@@ -6,7 +6,7 @@ plugins {
 }
 
 group = "dev.rollczi"
-version = "2.0.6"
+version = "2.0.7"
 
 repositories {
     mavenCentral()
@@ -22,8 +22,8 @@ dependencies {
     compileOnly("org.spigotmc:spigot-api:1.20.4-R0.1-SNAPSHOT")
 
     // kyori adventure
-    implementation("net.kyori:adventure-platform-bukkit:4.4.0")
-    implementation("net.kyori:adventure-text-minimessage:4.23.0")
+    implementation("net.kyori:adventure-platform-bukkit:4.4.1")
+    implementation("net.kyori:adventure-text-minimessage:4.24.0")
 
     // LiteCommands
     implementation("dev.rollczi.litecommands:bukkit-adventure:2.8.9")

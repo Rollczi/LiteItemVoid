@@ -42,7 +42,7 @@ tasks.compileJava {
 }
 
 java {
-    toolchain.languageVersion.set(JavaLanguageVersion.of(17))
+    toolchain.languageVersion.set(JavaLanguageVersion.of(21))
 }
 
 bukkit {
@@ -74,13 +74,12 @@ tasks.shadowJar {
         "org.panda_lang",
         "net.dzikoysk",
         "net.kyori",
-        "dev.rollczi.litecommands",
-        "com.google.gson"
+        "dev.rollczi.litecommands"
     ).forEach { pack ->
         relocate(pack, "$prefix.$pack")
     }
 }
 
 tasks.runServer {
-    minecraftVersion("1.20.4")
+    minecraftVersion("1.21.7")
 }

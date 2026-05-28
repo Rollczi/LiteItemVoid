@@ -1,8 +1,8 @@
 plugins {
     `java-library`
-    id("com.gradleup.shadow") version "8.3.9"
+    id("com.gradleup.shadow") version "9.4.2"
     id("net.minecrell.plugin-yml.bukkit") version "0.6.0"
-    id("xyz.jpenilla.run-paper") version "2.3.1"
+    id("xyz.jpenilla.run-paper") version "3.0.2"
 }
 
 group = "dev.rollczi"
@@ -23,7 +23,7 @@ dependencies {
 
     // kyori adventure
     implementation("net.kyori:adventure-platform-bukkit:4.4.1")
-    implementation("net.kyori:adventure-text-minimessage:4.26.1")
+    implementation("net.kyori:adventure-text-minimessage:5.1.1")
 
     // LiteCommands
     implementation("dev.rollczi.litecommands:bukkit-adventure:2.8.9")

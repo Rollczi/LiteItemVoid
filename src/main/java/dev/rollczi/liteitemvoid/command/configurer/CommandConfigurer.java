@@ -1,9 +1,16 @@
 package dev.rollczi.liteitemvoid.command.configurer;
 
-import dev.rollczi.litecommands.factory.CommandEditor;
+import dev.rollczi.litecommands.command.builder.CommandBuilder;
+import dev.rollczi.litecommands.editor.Editor;
+import dev.rollczi.litecommands.meta.Meta;
+import dev.rollczi.litecommands.permission.PermissionSet;
 import dev.rollczi.liteitemvoid.config.plugin.CommandConfig;
+import org.bukkit.command.CommandSender;
 
-public class CommandConfigurer implements CommandEditor {
+import java.util.List;
+import java.util.Map;
+
+public class CommandConfigurer implements Editor<CommandSender> {
 
     private final CommandConfig commandConfig;
 
@@ -12,24 +19,36 @@ public class CommandConfigurer implements CommandEditor {
     }
 
     @Override
-    public State edit(State state) {
-        CommandConfig.Command command = this.commandConfig.commands.get(state.getName());
+    public CommandBuilder<CommandSender> edit(CommandBuilder<CommandSender> context) {
+        CommandConfig.Command command = this.commandConfig.commands.get(context.name());
 
         if (command == null) {
-            return state;
+            return context;
         }
 
-        for (String child : command.arguments.keySet()) {
-            CommandConfig.CommandArgument argument = command.arguments.get(child);
+        for (Map.Entry<String, CommandConfig.CommandArgument> entry : command.arguments.entrySet()) {
+            if (context.getChild(entry.getKey()).isEmpty()) {
+                continue;
+            }
 
-            state = state.editChild(child, editor -> editor.name(argument.name)
-                    .aliases(argument.alias, true)
-                    .permission(argument.permissions, true));
+            CommandConfig.CommandArgument argument = entry.getValue();
+
+            context = context.editChild(entry.getKey(), child -> applyPermissions(child
+                    .name(argument.name)
+                    .aliases(argument.alias), argument.permissions));
         }
 
-        return state.name(command.name)
-                .aliases(command.aliases, true)
-                .permission(command.permissions, true);
-
+        return applyPermissions(context
+                .name(command.name)
+                .aliases(command.aliases), command.permissions);
     }
+
+    private static CommandBuilder<CommandSender> applyPermissions(CommandBuilder<CommandSender> builder, List<String> permissions) {
+        if (permissions == null || permissions.isEmpty()) {
+            return builder.applyMeta(meta -> meta.put(Meta.PERMISSIONS, List.of()));
+        }
+
+        return builder.applyMeta(meta -> meta.put(Meta.PERMISSIONS, List.of(new PermissionSet(permissions))));
+    }
+
 }

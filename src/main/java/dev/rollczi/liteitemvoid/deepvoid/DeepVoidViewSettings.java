@@ -1,10 +1,11 @@
 package dev.rollczi.liteitemvoid.deepvoid;
 
+import net.kyori.adventure.text.Component;
 import org.bukkit.inventory.ItemStack;
 
 public interface DeepVoidViewSettings {
 
-    String getTitle();
+    Component title();
 
     ItemStack corners();
 

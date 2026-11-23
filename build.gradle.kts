@@ -1,35 +1,27 @@
 plugins {
     `java-library`
-    id("com.gradleup.shadow") version "8.3.9"
-    id("net.minecrell.plugin-yml.bukkit") version "0.6.0"
-    id("xyz.jpenilla.run-paper") version "2.3.1"
+    id("com.gradleup.shadow") version "9.6.1"
+    id("de.eldoria.plugin-yml.bukkit") version "0.9.0"
+    id("xyz.jpenilla.run-paper") version "3.0.2"
 }
 
 group = "dev.rollczi"
-version = "2.0.7"
+version = "2.1.0"
 
 repositories {
     mavenCentral()
 
     maven("https://repo.panda-lang.org/releases")
     maven("https://repo.papermc.io/repository/maven-public/")
-    maven("https://oss.sonatype.org/content/repositories/snapshots/")
-    maven("https://hub.spigotmc.org/nexus/content/repositories/snapshots/")
 }
 
 dependencies {
-    // Spigot API
-    compileOnly("org.spigotmc:spigot-api:1.20.4-R0.1-SNAPSHOT")
-
-    // kyori adventure
-    implementation("net.kyori:adventure-platform-bukkit:4.4.1")
-    implementation("net.kyori:adventure-text-minimessage:4.26.1")
+    // Paper API (Adventure and MiniMessage are provided natively by Paper)
+    compileOnly("io.papermc.paper:paper-api:26.3.build.259-stable")
 
     // LiteCommands
-    implementation("dev.rollczi.litecommands:bukkit-adventure:2.8.9")
-
-    // TriumphGUI
-    implementation("dev.triumphteam:triumph-gui:3.1.13")
+    implementation("dev.rollczi:litecommands-bukkit:3.11.0")
+    implementation("dev.rollczi:litecommands-adventure:3.11.0")
 
     // CDN
     implementation("net.dzikoysk:cdn:1.14.9") {
@@ -37,17 +29,19 @@ dependencies {
     }
 }
 
-tasks.compileJava {
-    options.encoding = "UTF-8"
+java {
+    toolchain.languageVersion.set(JavaLanguageVersion.of(25))
 }
 
-java {
-    toolchain.languageVersion.set(JavaLanguageVersion.of(21))
+tasks.compileJava {
+    options.encoding = "UTF-8"
+    options.compilerArgs.add("-parameters")
+    options.release = 25
 }
 
 bukkit {
     main = "dev.rollczi.liteitemvoid.ItemVoidPlugin"
-    apiVersion = "1.13"
+    apiVersion = "26.3"
     prefix = "LiteItemVoid"
     authors = listOf("Rollczi", "Piotrulla")
     name = "LiteItemVoid"
@@ -65,6 +59,10 @@ tasks.shadowJar {
         "javax/**"
     )
 
+    dependencies {
+        exclude(dependency("net.kyori:.*"))
+    }
+
     mergeServiceFiles()
 
     val prefix = "dev.rollczi.liteitemvoid.libs"
@@ -73,7 +71,6 @@ tasks.shadowJar {
         "panda",
         "org.panda_lang",
         "net.dzikoysk",
-        "net.kyori",
         "dev.rollczi.litecommands"
     ).forEach { pack ->
         relocate(pack, "$prefix.$pack")
@@ -81,5 +78,6 @@ tasks.shadowJar {
 }
 
 tasks.runServer {
-    minecraftVersion("1.21.7")
+    minecraftVersion("26.3")
+    javaLauncher.set(javaToolchains.launcherFor { languageVersion.set(JavaLanguageVersion.of(25)) })
 }

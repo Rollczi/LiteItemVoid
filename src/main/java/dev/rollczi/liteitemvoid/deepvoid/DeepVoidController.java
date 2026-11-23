@@ -6,10 +6,8 @@ package dev.rollczi.liteitemvoid.deepvoid;
 
 import dev.rollczi.liteitemvoid.config.plugin.PluginConfig;
 import dev.rollczi.liteitemvoid.shared.ItemStackList;
-import net.kyori.adventure.platform.AudienceProvider;
 import org.bukkit.entity.Entity;
 import dev.rollczi.liteitemvoid.scheduler.Scheduler;
-import net.kyori.adventure.platform.bukkit.BukkitAudiences;
 import net.kyori.adventure.text.Component;
 import org.bukkit.Server;
 import org.bukkit.World;
@@ -24,15 +22,13 @@ import java.util.function.Consumer;
 
 public class DeepVoidController {
 
-    private final AudienceProvider audienceProvider;
     private final Server server;
     private final PluginConfig config;
     private final Scheduler scheduler;
     private final DeepVoid deepVoid;
     private final DeepVoidView view;
 
-    public DeepVoidController(AudienceProvider audienceProvider, Server server, PluginConfig config, Scheduler scheduler, DeepVoid deepVoid, DeepVoidView view) {
-        this.audienceProvider = audienceProvider;
+    public DeepVoidController(Server server, PluginConfig config, Scheduler scheduler, DeepVoid deepVoid, DeepVoidView view) {
         this.server = server;
         this.config = config;
         this.scheduler = scheduler;
@@ -55,7 +51,7 @@ public class DeepVoidController {
         Component component = config.messagesInTime.get(this.deepVoid.getTimeToOpen());
 
         if (component != null) {
-            audienceProvider.players().sendMessage(component);
+            this.server.filterAudience(audience -> audience instanceof Player).sendMessage(component);
         }
 
         if (this.deepVoid.getTimeToOpen() <= 0) {
@@ -95,7 +91,7 @@ public class DeepVoidController {
             this.deepVoid.close();
 
             for (Player player : this.view.closeAll()) {
-                this.audienceProvider.player(player.getUniqueId()).sendMessage(this.config.voidClosedForce);
+                player.sendMessage(this.config.voidClosedForce);
             }
 
         }, this.config.timeCloseVoid);
@@ -103,7 +99,7 @@ public class DeepVoidController {
 
     private <T extends Entity> void removeEntities(World world, Class<T> type, Consumer<T> collector) {
         for (T entity : world.getEntitiesByClass(type)) {
-            if (config.ignoreNameTags && entity.getCustomName() != null) {
+            if (config.ignoreNameTags && entity.customName() != null) {
                 continue;
             }
 

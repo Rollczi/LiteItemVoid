@@ -5,8 +5,9 @@
 package dev.rollczi.liteitemvoid;
 
 import dev.rollczi.litecommands.LiteCommands;
-import dev.rollczi.litecommands.bukkit.adventure.platform.LiteBukkitAdventurePlatformFactory;
-import dev.rollczi.litecommands.bukkit.tools.BukkitOnlyPlayerContextual;
+import dev.rollczi.litecommands.adventure.LiteAdventureExtension;
+import dev.rollczi.litecommands.bukkit.LiteBukkitFactory;
+import dev.rollczi.litecommands.bukkit.LiteBukkitMessages;
 import dev.rollczi.liteitemvoid.command.configurer.CommandConfigurer;
 import dev.rollczi.liteitemvoid.command.message.InvalidUseMessageHandler;
 import dev.rollczi.liteitemvoid.command.message.PermissionMessageHandler;
@@ -20,73 +21,53 @@ import dev.rollczi.liteitemvoid.scheduler.Scheduler;
 import dev.rollczi.liteitemvoid.scheduler.SchedulerBukkit;
 import dev.rollczi.liteitemvoid.util.LegacyColorProcessor;
 import dev.rollczi.liteitemvoid.view.ViewRegistry;
-import net.kyori.adventure.platform.AudienceProvider;
-import net.kyori.adventure.platform.bukkit.BukkitAudiences;
 import net.kyori.adventure.text.minimessage.MiniMessage;
 import org.bukkit.command.CommandSender;
-import org.bukkit.entity.Player;
-import org.bukkit.plugin.PluginDescriptionFile;
 import org.bukkit.plugin.java.JavaPlugin;
 
 public final class ItemVoidPlugin extends JavaPlugin {
-
-    private ConfigurationManager configurationManager;
-
-    private AudienceProvider audienceProvider;
-
-    private DeepVoid deepVoid;
-    private ViewRegistry viewRegistry;
 
     private LiteCommands<CommandSender> liteCommands;
 
     @Override
     public void onEnable() {
         Scheduler scheduler = new SchedulerBukkit(this);
-        this.audienceProvider = BukkitAudiences.create(this);
         MiniMessage miniMessage = MiniMessage.builder()
                 .postProcessor(new LegacyColorProcessor())
                 .build();
 
-        this.configurationManager = new ConfigurationManager(this.getDataFolder());
-        this.configurationManager.loadConfigs();
+        ConfigurationManager configurationManager = new ConfigurationManager(this.getDataFolder());
+        configurationManager.loadConfigs();
 
-        NotificationService notificationService = new NotificationService(this.audienceProvider);
+        PluginConfig pluginConfig = configurationManager.getPluginConfig();
+        DeepVoid deepVoid = new DeepVoid();
+        ViewRegistry viewRegistry = new ViewRegistry(this.getServer(), pluginConfig);
 
-        this.deepVoid = new DeepVoid();
-        this.viewRegistry = new ViewRegistry(this.getServer(), configurationManager.getPluginConfig());
+        DeepVoidController deepVoidController = new DeepVoidController(this.getServer(), pluginConfig, scheduler, deepVoid, viewRegistry.deepVoid);
 
-        DeepVoidController deepVoidController = new DeepVoidController(audienceProvider, this.getServer(), configurationManager.getPluginConfig(), scheduler, deepVoid, viewRegistry.deepVoid);
+        this.liteCommands = LiteBukkitFactory.builder("lite-item-void", this)
+                .extension(new LiteAdventureExtension<>(), settings -> settings
+                        .miniMessage(true)
+                        .legacyColor(true)
+                        .serializer(miniMessage))
 
-        this.liteCommands = LiteBukkitAdventurePlatformFactory.builder(this.getServer(), "lite-item-void", false, audienceProvider, miniMessage)
-                .invalidUsageHandler(new InvalidUseMessageHandler(configurationManager.getPluginConfig(), notificationService))
-                .permissionHandler(new PermissionMessageHandler(notificationService, configurationManager.getPluginConfig()))
+                .invalidUsage(new InvalidUseMessageHandler(pluginConfig))
+                .missingPermission(new PermissionMessageHandler(pluginConfig))
+                .message(LiteBukkitMessages.PLAYER_ONLY, "Only players can use this command!")
 
-                .contextualBind(Player.class,   new BukkitOnlyPlayerContextual<>("Only players can use this command!"))
+                .editorGlobal(new CommandConfigurer(configurationManager.getCommandConfig()))
+                .commands(new DeepVoidCommand(pluginConfig, deepVoid, viewRegistry, configurationManager, this.getPluginMeta(), miniMessage, this.getLogger()))
 
-                .typeBind(ConfigurationManager.class,   () -> this.configurationManager)
-                .typeBind(PluginConfig.class,           () -> this.configurationManager.getPluginConfig())
-                .typeBind(DeepVoid.class,               () -> this.deepVoid)
-                .typeBind(ViewRegistry.class,           () -> this.viewRegistry)
-                .typeBind(AudienceProvider.class,       () -> this.audienceProvider)
-                .typeBind(PluginDescriptionFile.class,  this::getDescription)
-                .command(DeepVoidCommand.class)
+                .build();
 
-                .commandGlobalEditor(new CommandConfigurer(configurationManager.getCommandConfig()))
-
-                .register();
-
-        this.getServer().getPluginManager().registerEvents(new DeepVoidViewController(this.viewRegistry.deepVoid), this);
+        this.getServer().getPluginManager().registerEvents(new DeepVoidViewController(viewRegistry.deepVoid), this);
         deepVoidController.runClearTask();
     }
 
     @Override
     public void onDisable() {
         if (this.liteCommands != null) {
-            this.liteCommands.getPlatform().unregisterAll();
-        }
-
-        if (this.audienceProvider != null) {
-            this.audienceProvider.close();
+            this.liteCommands.unregister();
         }
     }
 

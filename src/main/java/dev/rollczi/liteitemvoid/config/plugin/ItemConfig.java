@@ -5,19 +5,25 @@
 package dev.rollczi.liteitemvoid.config.plugin;
 
 import dev.rollczi.liteitemvoid.util.LegacyColorProcessor;
-import dev.triumphteam.gui.builder.item.ItemBuilder;
+import com.destroystokyo.paper.profile.PlayerProfile;
+import com.destroystokyo.paper.profile.ProfileProperty;
 import net.dzikoysk.cdn.entity.Contextual;
 import net.dzikoysk.cdn.entity.Exclude;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.TextComponent;
 import net.kyori.adventure.text.format.TextDecoration;
 import net.kyori.adventure.text.minimessage.MiniMessage;
+import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
-import panda.utilities.StringUtils;
+import org.bukkit.inventory.meta.Damageable;
+import org.bukkit.inventory.meta.SkullMeta;
 
+import java.nio.charset.StandardCharsets;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 @Contextual
@@ -34,7 +40,7 @@ public class ItemConfig {
             .build();
 
     public Material type = Material.STONE;
-    public String skull = StringUtils.EMPTY;
+    public String skull = "";
     public int durability = 0;
     public Component name = MINI_MESSAGE.deserialize("<green>name</green>");
     public List<Component> lore = Collections.emptyList();
@@ -72,22 +78,30 @@ public class ItemConfig {
     }
 
     public ItemStack toItem() {
-        if (skull.isEmpty()) {
-            return ItemBuilder.from(new ItemStack(type, 1, (short) durability))
-                    .name(RESET.append(name))
-                    .lore(lore.stream()
-                            .map(RESET::append)
-                            .collect(Collectors.toList()))
-                    .build();
+        List<Component> itemLore = new ArrayList<>(this.lore.size());
+
+        for (Component line : this.lore) {
+            itemLore.add(RESET.append(line));
         }
 
-        return ItemBuilder.skull()
-                .texture(skull)
-                .name(RESET.append(name))
-                .lore(lore.stream()
-                        .map(RESET::append)
-                        .collect(Collectors.toList()))
-                .build();
+        ItemStack itemStack = ItemStack.of(this.skull.isEmpty() ? this.type : Material.PLAYER_HEAD);
+
+        itemStack.editMeta(meta -> {
+            meta.displayName(RESET.append(this.name));
+            meta.lore(itemLore);
+
+            if (this.durability > 0 && meta instanceof Damageable damageable) {
+                damageable.setDamage(this.durability);
+            }
+
+            if (!this.skull.isEmpty() && meta instanceof SkullMeta skullMeta) {
+                PlayerProfile profile = Bukkit.createProfile(UUID.nameUUIDFromBytes(this.skull.getBytes(StandardCharsets.UTF_8)));
+                profile.setProperty(new ProfileProperty("textures", this.skull));
+                skullMeta.setPlayerProfile(profile);
+            }
+        });
+
+        return itemStack;
     }
 
     public static ItemConfig skull(String skull, Component name) {

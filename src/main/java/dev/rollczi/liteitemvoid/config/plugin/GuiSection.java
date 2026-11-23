@@ -12,8 +12,6 @@ import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.minimessage.MiniMessage;
 import org.bukkit.Material;
 
-import java.util.function.Supplier;
-
 import static dev.rollczi.liteitemvoid.config.plugin.ItemConfig.skull;
 
 @Contextual
@@ -51,27 +49,13 @@ public class GuiSection {
     public int nextSlot = 7;
 
     @Description( { "#PL: Wypełnienie gui", "#EN: Fill gui" } )
-    public ItemConfig fill = tryOr(
-            () -> new ItemConfig(Material.valueOf("GRAY_STAINED_GLASS_PANE"), 0, "&7 &7"),
-            () -> new ItemConfig(Material.valueOf("STAINED_GLASS_PANE"), 7, "&7 &7")
-    );
+    public ItemConfig fill = new ItemConfig(Material.GRAY_STAINED_GLASS_PANE, 0, "&7 &7");
 
     @Description( { "#PL: Ozdobny item wyświetlany w rogach gui", "#EN: Decorative item in gui corners" } )
-    public ItemConfig cornerFill = tryOr(
-            () -> new ItemConfig(Material.valueOf("BLACK_STAINED_GLASS_PANE"), 0, "&7 - &7"),
-            () -> new ItemConfig(Material.valueOf("STAINED_GLASS_PANE"), 15, "&7 - &7")
-    );
+    public ItemConfig cornerFill = new ItemConfig(Material.BLACK_STAINED_GLASS_PANE, 0, "&7 - &7");
 
     private Component of(String text) {
         return MINI_MESSAGE.deserialize(text);
-    }
-
-    private <T> T tryOr(Supplier<T> supplier, Supplier<T> defaultValue) {
-        try {
-            return supplier.get();
-        } catch (Throwable throwable) {
-            return defaultValue.get();
-        }
     }
 
 }

@@ -8,6 +8,10 @@ You can buy this plugin on [buildbybit](https://builtbybit.com/resources/liteite
 
 Also, feel free to build LiteItemVoid on your own.
 
+### Requirements
+- [Paper](https://papermc.io/downloads/paper) 26.3 or newer
+- Java 25
+
 ### Features
 - Cleaning the world from unnecessary items lying on the ground.
 - Retrieving items from the abyss inventory (/void)

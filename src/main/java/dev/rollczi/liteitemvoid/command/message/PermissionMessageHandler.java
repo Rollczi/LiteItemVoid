@@ -4,32 +4,31 @@
 
 package dev.rollczi.liteitemvoid.command.message;
 
-import dev.rollczi.litecommands.command.LiteInvocation;
-import dev.rollczi.litecommands.command.permission.RequiredPermissions;
-import dev.rollczi.litecommands.handle.PermissionHandler;
-import dev.rollczi.liteitemvoid.NotificationService;
+import dev.rollczi.litecommands.handler.result.ResultHandlerChain;
+import dev.rollczi.litecommands.invocation.Invocation;
+import dev.rollczi.litecommands.permission.MissingPermissions;
+import dev.rollczi.litecommands.permission.MissingPermissionsHandler;
 import dev.rollczi.liteitemvoid.config.plugin.PluginConfig;
 import net.kyori.adventure.text.Component;
 import org.bukkit.command.CommandSender;
-import panda.utilities.text.Joiner;
 
-public class PermissionMessageHandler implements PermissionHandler<CommandSender> {
+public class PermissionMessageHandler implements MissingPermissionsHandler<CommandSender> {
 
-    private final NotificationService notificationService;
     private final PluginConfig pluginConfig;
 
-    public PermissionMessageHandler(NotificationService notificationService, PluginConfig pluginConfig) {
-        this.notificationService = notificationService;
+    public PermissionMessageHandler(PluginConfig pluginConfig) {
         this.pluginConfig = pluginConfig;
     }
 
     @Override
-    public void handle(CommandSender commandSender, LiteInvocation invocation, RequiredPermissions requiredPermissions) {
-        Component component = pluginConfig.invalidPermission
+    public void handle(Invocation<CommandSender> invocation, MissingPermissions missingPermissions, ResultHandlerChain<CommandSender> chain) {
+        String permissions = missingPermissions.asJoinedText();
+        Component component = this.pluginConfig.invalidPermission
                 .replaceText(builder -> builder
-                        .match("\\$\\{permissions}")
-                        .replacement(Joiner.on(", ").join(requiredPermissions.getPermissions()).toString()));
+                        .matchLiteral("${permissions}")
+                        .replacement(permissions));
 
-        this.notificationService.sendMessage(commandSender, component);
+        invocation.sender().sendMessage(component);
     }
+
 }

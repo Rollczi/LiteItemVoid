@@ -1,6 +1,5 @@
 package dev.rollczi.liteitemvoid.deepvoid;
 
-import dev.rollczi.liteitemvoid.util.MaterialUtil;
 import org.bukkit.Server;
 import org.bukkit.entity.HumanEntity;
 import org.bukkit.entity.Player;
@@ -79,7 +78,7 @@ public class DeepVoidViewPage {
         for (int slot = 0; slot < contents.length; slot++) {
             ItemStack content = contents[slot];
 
-            if (content != null && !MaterialUtil.isAir(content.getType())) {
+            if (content != null && !content.isEmpty()) {
                 continue;
             }
 
@@ -120,7 +119,7 @@ public class DeepVoidViewPage {
 
     public static DeepVoidViewPage create(int page, Server server, DeepVoidViewSettings settings) {
         DeepVoidViewHolder holder = new DeepVoidViewHolder();
-        Inventory inventory = server.createInventory(holder, 9 * 6, settings.getTitle());
+        Inventory inventory = server.createInventory(holder, 9 * 6, settings.title());
         holder.setInventory(inventory);
 
         DeepVoidViewPage deepVoidPage = new DeepVoidViewPage(page, inventory, holder, settings);

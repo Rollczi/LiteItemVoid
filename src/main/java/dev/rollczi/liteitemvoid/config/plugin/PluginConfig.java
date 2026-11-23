@@ -6,7 +6,6 @@ package dev.rollczi.liteitemvoid.config.plugin;
 
 import com.google.common.collect.ImmutableMap;
 import dev.rollczi.liteitemvoid.util.LegacyColorProcessor;
-import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer;
 import org.bukkit.inventory.ItemStack;
 import dev.rollczi.liteitemvoid.config.AbstractConfigWithResource;
 import net.dzikoysk.cdn.entity.Description;
@@ -22,12 +21,6 @@ import java.util.List;
 import java.util.Map;
 
 public class PluginConfig extends AbstractConfigWithResource implements DeepVoidViewSettings {
-
-    @Exclude
-    private static final LegacyComponentSerializer LEGACY_SERIALIZER = LegacyComponentSerializer.builder()
-            .hexColors()
-            .useUnusualXRepeatedCharacterHexFormat()
-            .build();
 
     @Exclude
     private static final MiniMessage MINI_MESSAGE = MiniMessage.builder()
@@ -150,8 +143,8 @@ public class PluginConfig extends AbstractConfigWithResource implements DeepVoid
     }
 
     @Override
-    public String getTitle() {
-        return LEGACY_SERIALIZER.serialize(this.gui.title);
+    public Component title() {
+        return this.gui.title;
     }
 
     @Override
